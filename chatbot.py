@@ -1,17 +1,3 @@
-# CS 421: Natural Language Processing
-# University of Illinois at Chicago
-# Fall 2020
-# Chatbot Project - Dialogue Manager
-#
-# Do not rename/delete any functions or global variables provided in this template and write your solution
-# in the specified sections. Use the main function to test your code when running it from a terminal.
-# Avoid writing that code in the global scope; however, you should write additional functions/classes
-# as needed in the global scope. These templates may also contain important information and/or examples
-# in comments so please read them carefully.
-# =========================================================================================================
-
-# Import any necessary libraries here, but check with the course staff before requiring any external
-# libraries.
 from collections import defaultdict
 import random
 import re
@@ -20,13 +6,11 @@ from nltk.corpus import wordnet as wn
 
 dst = defaultdict(list)
 
-
 # update_dst(input): Updates the dialogue state tracker
 # Input: A list ([]) of (slot, value) pairs.  Slots should be strings; values can be whatever is
 #        most appropriate for the corresponding slot.  Defaults to an empty list.
 # Returns: Nothing
 def update_dst(input=[]):
-    # [YOUR CODE HERE]
     questions = ["symptoms", "family_history", "outside_contact", "other_issues", "no"]
     global dst
     for i, j in input:
@@ -41,24 +25,6 @@ def update_dst(input=[]):
         else:
             dst[i] = j
     return
-# Q1 Written
-# Slot: greetings               Permissible Values: String ("can I book an appointment?" or some variant)
-# Slot: symptoms                Permissible Values: String ("yes" or "no")
-# Slot: clarify_symptoms        Permissible Values: String if dst["symptoms"] == "yes", list as "a, b, ...",
-#                                                   empty otherwise
-# Slot: family_history          Permissible Values: String ("yes" or "no")
-# Slot: clarify_family_history  Permissible Values: String if dst["family_history"] == "yes", list as "a, b, ..."
-#                                                   empty otherwise
-# Slot: outside_contact         Permissible Values: String ("yes" or "no")
-# Slot: clarify_outside_contact Permissible Values: String if dst["outside_contact"] == "yes", list as "a, b, ..."
-#                                                   empty otherwise
-# Slot: other_issues            Permissible Values: String ("yes" or "no")
-# Slot: clarify_other_issues    Permissible Values: String if dst["other issues"] == "yes", list as "a, b, ..."
-#                                                   empty otherwise
-# Slot: create_appointment      Permissible Values: String ("<Day> (ex 'Today', 'Tomorrow', etc.)
-#                                                           at <Time> (ex. '8am', 'noon', '5:30pm', etc.)")
-# Slot: confirm_appointment     Permissible Values: String ("yes" or "no")
-# Slot: book_appointment        Permissible Values: String ("Thanks" or any variant), optional, can also be empty
 
 # get_dst(slot): Retrieves the stored value for the specified slot, or the full dialogue state at the
 #                current time if no argument is provided.
@@ -66,7 +32,6 @@ def update_dst(input=[]):
 # Returns: A dictionary representation of the full dialogue state (if no slot name is provided), or the
 #          value corresponding to the specified slot.
 def get_dst(slot=""):
-    # [YOUR CODE HERE]
     # if no argument was given (or a blank one was given)
     if slot == "":
         return dict(dst)
@@ -77,12 +42,6 @@ def get_dst(slot=""):
     else:
         return dst[slot]
 
-    # Dummy code for sample output (delete or comment out when writing your code!):
-    # dummy_state = defaultdict(list)
-    # dummy_state["num_pizzas"] = 5
-    # dummy_state["pizza_toppings"] = ["hot peppers", "olives"]
-    # return dummy_state
-
 
 # dialogue_policy(dst): Selects the next dialogue state to be uttered by the chatbot.
 # Input: A dictionary representation of a full dialogue state.
@@ -90,7 +49,6 @@ def get_dst(slot=""):
 #          for generating an utterance for that dialogue state (or an empty list of no (slot, value) pairs
 #          are needed).
 def dialogue_policy(dst):
-    # [YOUR CODE HERE]
     # if the user gave an empty dictionary (or one without a user_intent_history), we give a greeting
     #try:
     unknowns = ["unknown_not_yes_no", "unknown_question", "unknown_time", "unknown_day", "unknown_generic", "unknown_not_specific"]
@@ -148,13 +106,6 @@ def dialogue_policy(dst):
     else:
         # if we end up here, we should set it to just terminate, something wrong happened
         return "unknown_question", []
-    #except KeyError:
-    #    return "idk", []
-
-    #return "clarification", [("num_puzzas", 5)]
-    # Dummy code for sample output (delete or comment out when writing your code!):
-    # next_state = "clarification"
-    # slot_values = [("num_pizzas", 5)]
 
 
 # nlg(state, slots=[]): Generates a surface realization for the specified dialogue act.
@@ -162,7 +113,6 @@ def dialogue_policy(dst):
 # Returns: A string representing a sentence generated for the specified state, optionally
 #          including the specified slot values if they are needed by the template.
 def nlg(state, slots=[]):
-    # [YOUR CODE HERE]
     templates = defaultdict(list)
 
     templates["greetings"].append("Hello, this is Dr. Peng's office. Did you need to schedule an appointment?")
@@ -253,15 +203,6 @@ def nlg(state, slots=[]):
     # for both
     templates["book_appointment"].append(" I also informed the doctor about your <family_member> and <outside_contact>.")
 
-    # Dummy code for sample output (delete or comment out when writing your code!):
-
-    # Build at least two templates for each dialogue state that your chatbot might use.
-
-    # When you implement this for real, you'll need to randomly select one of the templates for
-    # the specified state, rather than always selecting template 0.  You probably also will not
-    # want to rely on hardcoded input slot positions (e.g., slots[0][1]).  Optionally, you might
-    # want to include logic that handles a/an and singular/plural terms, to make your chatbot's
-    # output more natural (e.g., avoiding "did you say you want 1 pizzas?").
     i = random.randint(0, 1)
     output = ""
     replacetime = ""
@@ -397,9 +338,6 @@ def nlg(state, slots=[]):
 
 
 def nlu(input=""):
-    # [YOUR CODE HERE]
-
-    # Dummy code for sample output (delete or comment out when writing your code!):
     slots_and_values = []
 
     # List of questions where the user responds with a yes or no
@@ -408,8 +346,6 @@ def nlu(input=""):
     # Clarification states to make sure the user explains his/her responses
     clarifications = ["clarify_symptoms", "clarify_family_history", "clarify_other_issues", "clarify_outside_contact"]
 
-    # To narrow the set of expected slots, you may (optionally) first want to determine the user's intent,
-    # based on what the chatbot said most recently.
     user_intent = ""
     # these 4 are specifically for the date and time part
     indexofday = 0
@@ -601,10 +537,6 @@ def nlu(input=""):
 
     return slots_and_values
 
-
-# Use this main function to test your code when running it from a terminal
-# Sample code is provided to assist with the assignment, feel free to change/remove it if you want
-# You can run the code from terminal as: python3 chatbot.py
 
 def main():
     current_state_tracker = get_dst()
